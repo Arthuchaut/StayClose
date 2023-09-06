@@ -6,6 +6,9 @@
 ## SavedVariables: StayCloseSettings
 
 DefaultSettings.lua
+Modules/Localization/Vector2D.lua
+Modules/Localization/Position.lua
+Modules/Localization/Localization.lua
 Modules/Initializer.lua
 Modules/Core.lua
 StayClose.lua
