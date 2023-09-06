@@ -5,31 +5,49 @@ function Core.New()
     local self = setmetatable({}, Core)
     self.playerPosition = nil
     self.targetPosition = nil
-    self.playerDistanceFromTarget = nil
-    self.playerBearing = nil
     self.distanceAlertEnabled = false
     self.instanceAlertEnabled = false
+    self.distanceMessageFrame = MessageFrame.New(GetScreenWidth(), GetScreenHeight())
+    self.instanceMessageFrame = MessageFrame.New(GetScreenWidth(), GetScreenHeight())
     return self
 end
 
 function Core:EnableDistanceAlertMessage()
-    print("Distance alert enabled!", self.playerDistanceFromTarget)
+    self.distanceMessageFrame:Show()
 end
 
 function Core:UpdateBearingInfo()
-    print("Bearing:", self.playerBearing)
+    self.distanceMessageFrame:SetMessage(
+        string.format(
+            "%s (%.f yd).",
+            StayCloseSettings.static.distanceAlertMessage,
+            self.playerBearing
+        )
+    )
+end
+
+function Core:UpdateDistanceInfo(playerDistanceFromTarget)
+    self.distanceMessageFrame:SetMessage(
+        string.format(
+            "%s (%.f yd).",
+            StayCloseSettings.static.distanceAlertMessage,
+            playerDistanceFromTarget
+        ),
+        unpack(StayCloseSettings.static.alertMessageColor)
+    )
 end
 
 function Core:DisableDistanceAlertMessage()
-    print("Distance alert disabled.")
+    self.distanceMessageFrame:Hide()
 end
 
 function Core:EnableInstanceAlertMessage()
-    print("Instance alert inabled!")
+    self.instanceMessageFrame:SetMessage("Instance alert enabled!", unpack(StayCloseSettings.static.alertMessageColor))
+    -- self.instanceMessageFrame:Show()
 end
 
 function Core:DisableInstanceAlertMessage()
-    print("Instance alert disabled.")
+    self.instanceMessageFrame:Hide()
 end
 
 function Core:UpdateFrame()
@@ -51,11 +69,11 @@ function Core:UpdateFrame()
                     self:DisableInstanceAlertMessage()
                 end
 
-                self.playerDistanceFromTarget = Localization:GetEuclideanDistance(self.playerPosition, self.targetPosition)
+                local playerDistanceFromTarget = Localization:GetEuclideanDistance(self.playerPosition, self.targetPosition)
 
-                if self.playerDistanceFromTarget >= StayCloseSettings.variable.minSafetyDistance then
-                    self.playerBearing = Localization:GetRelativeBearing(self.playerPosition, self.targetPosition)
-                    self:UpdateBearingInfo()
+                if playerDistanceFromTarget >= StayCloseSettings.variable.minSafetyDistance then
+                    local playerBearing = Localization:GetRelativeBearing(self.playerPosition, self.targetPosition)
+                    self:UpdateDistanceInfo(playerDistanceFromTarget)
 
                     if not self.distanceAlertEnabled then
                         self.distanceAlertEnabled = true

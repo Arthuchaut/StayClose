@@ -9,6 +9,7 @@ DefaultSettings.lua
 Libs/Localization/Vector2D.lua
 Libs/Localization/Position.lua
 Libs/Localization/Localization.lua
+Libs/MessageFrame.lua
 Modules/Initializer.lua
 Modules/Core.lua
 StayClose.lua

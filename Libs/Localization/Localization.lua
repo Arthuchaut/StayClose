@@ -23,7 +23,7 @@ function Localization:GetRelativeBearing(referencePosition, targetPosition)
     
     local substractedVector2D = referencePosition:SubtractVector2D(targetPosition)
     local absoluteBearing = math.atan2(substractedVector2D.y, substractedVector2D.x) -- In radian
-    local relativeBearing = math.deg(absoluteBearingToTarget - referencePosition.facing) % 360 -- In degree
+    local relativeBearing = math.deg(absoluteBearing - referencePosition.facing) % 360 -- In degree
 
     if relativeBearing < 0 then
         relativeBearing = 360 + relativeBearing
