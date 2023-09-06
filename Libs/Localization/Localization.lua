@@ -9,7 +9,7 @@ function Localization:GetWorldPosition(unitID)
         facing = GetPlayerFacing()
     end
 
-    return Position.new(x, y, mapID, facing)
+    return Position.New(x, y, mapID, facing)
 end
 
 function Localization:GetEuclideanDistance(positionA, positionB)
