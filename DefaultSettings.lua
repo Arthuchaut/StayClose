@@ -4,6 +4,7 @@ staticSettings = {
 }
 
 variableSettings = {
-    varA = nil,
-    varB = nil,
+    minSafetyDistance = 20, -- In yards
+    distanceWatcherEnabled = true,
+    targetID = "player"
 }
