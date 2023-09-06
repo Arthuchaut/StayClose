@@ -6,15 +6,19 @@ function Initializer.LoadAddOn(cls, callbackObjectReference, callback)
     local frame = CreateFrame("Frame")
     frame:RegisterEvent("ADDON_LOADED")
     frame:SetScript("OnEvent", function(self, event, addOnName)
-        if event == "ADDON_LOADED" and addOnName == defaultSettings.global.addOnName then
+        if event == "ADDON_LOADED" and addOnName == staticSettings.addOnName then
             if not StayCloseSettings or next(StayCloseSettings) == nil then
-                StayCloseSettings = defaultSettings
+                StayCloseSettings = {
+                    static = nil,
+                    variable = variableSettings,
+                }
             end
 
+            StayCloseSettings.static = staticSettings
             frame:SetScript("OnUpdate", function(_, deltaTime)
                 elapsedTime = elapsedTime + deltaTime
 
-                if elapsedTime >= StayCloseSettings.global.frameUpdateInterval then
+                if elapsedTime >= StayCloseSettings.static.frameUpdateInterval then
                     callback(callbackObjectReference)
                     elapsedTime = 0
                 end
