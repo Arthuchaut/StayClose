@@ -1,0 +1,11 @@
+## Interface: 11404
+## Title: StayClose
+## Author: Arthuchaut
+## Notes: Stay close to your team mate!
+## Version: 0.0.1-dev
+## SavedVariables: StayCloseSettings
+
+DefaultSettings.lua
+Modules/Initializer.lua
+Modules/Core.lua
+StayClose.lua
