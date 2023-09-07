@@ -1,7 +1,7 @@
 TextureFrame = {}
 TextureFrame.__index = TextureFrame
 
-function TextureFrame.New(width, height, x, y, textureFile)
+function TextureFrame.New(width, height, x, y, textureFile, textureColor)
     local self = setmetatable({}, TextureFrame)
     self.frame = CreateFrame("Frame", nil, UIParent)
     self.frame:SetSize(width, height)
@@ -9,8 +9,13 @@ function TextureFrame.New(width, height, x, y, textureFile)
     self.texture = self.frame:CreateTexture(nil, "BACKGROUND")
     self.texture:SetAllPoints(self.frame)
     self.texture:SetTexture(textureFile)
+    self:SetColor(unpack(textureColor))
     self:Hide()
     return self
+end
+
+function TextureFrame:SetColor(...)
+    self.texture:SetVertexColor(...)
 end
 
 function TextureFrame:Rotate(degree)

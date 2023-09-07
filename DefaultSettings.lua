@@ -22,6 +22,7 @@ DefaultSettings = {
             x = 0,
             y = -100,
             textureFile = "Interface\\AddOns\\StayClose\\Textures\\Arrow.tga",
+            textureColor = { 1, 0, 0, 1 }, -- RGBA
         }
     },
     mutable = {

@@ -28,7 +28,8 @@ function Core.New()
         StayCloseSettings.static.bearingArrow.height,
         StayCloseSettings.static.bearingArrow.x,
         StayCloseSettings.static.bearingArrow.y,
-        StayCloseSettings.static.bearingArrow.textureFile
+        StayCloseSettings.static.bearingArrow.textureFile,
+        StayCloseSettings.static.bearingArrow.textureColor
     )
     return self
 end
@@ -40,6 +41,9 @@ function Core:EnableDistanceAlertMessage()
 end
 
 function Core:UpdateBearingInfo(bearing)
+    local g = math.abs(bearing - 180) / 180
+    local r = 1 - g
+    self.bearingArrowFrame:SetColor(r, g, 0, 1)
     self.bearingArrowFrame:Rotate(bearing)
 end
 
