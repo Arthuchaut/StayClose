@@ -1,13 +1,31 @@
 DefaultSettings = {
     static = {
         addOnName = "StayClose",
-        frameUpdateInterval = 0.5, -- In seconds
-        distanceAlertMessage = "Careful! You're too far away from {targetName} ({distance} yds).",
-        instanceAlertMessage = "You're not in the same instance than {targetName}!",
-        alertMessageColor = { 1, 0, 0, 1 }, -- RGBA
+        frameUpdateInterval = 0.02, -- In seconds
+        distanceAlert = {
+            message = "Careful! You're too far away from {targetName} ({distance} yds).",
+            fontSize = 30,
+            fontColor = { 1, 0, 0, 1 }, -- RGBA
+            x = 0,
+            y = 0,
+        },
+        instanceAlert = {
+            message = "You're not in the same instance than {targetName}!",
+            fontSize = 30,
+            fontColor = { 1, 0, 0, 1 }, -- RGBA
+            x = 0,
+            y = 0,
+        },
+        bearingArrow = {
+            width = 50,
+            height = 50,
+            x = 0,
+            y = -100,
+            textureFile = "Interface\\AddOns\\StayClose\\Textures\\Arrow.tga",
+        }
     },
     mutable = {
-        minSafetyDistance = 20, -- In yards
+        safetyRadius = 20, -- In yards
         distanceWatcherEnabled = true,
         targetID = "player",
     }

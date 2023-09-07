@@ -1,2 +1,1 @@
-local core = Core.New()
-core:Run()
+Initializer.LoadAddOn()

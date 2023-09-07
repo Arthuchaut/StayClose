@@ -11,6 +11,7 @@ Libs/Localization/Vector2D.lua
 Libs/Localization/Position.lua
 Libs/Localization/Localization.lua
 Libs/MessageFrame.lua
-Modules/Initializer.lua
+Libs/TextureFrame.lua
 Modules/Core.lua
+Modules/Initializer.lua
 StayClose.lua

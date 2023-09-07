@@ -7,48 +7,69 @@ function Core.New()
     self.targetPosition = nil
     self.distanceAlertEnabled = false
     self.instanceAlertEnabled = false
-    self.distanceMessageFrame = MessageFrame.New(GetScreenWidth(), GetScreenHeight())
-    self.instanceMessageFrame = MessageFrame.New(GetScreenWidth(), GetScreenHeight())
+    self.distanceMessageFrame = MessageFrame.New(
+        GetScreenWidth(),
+        GetScreenHeight(),
+        StayCloseSettings.static.distanceAlert.x,
+        StayCloseSettings.static.distanceAlert.y,
+        StayCloseSettings.static.distanceAlert.fontSize,
+        StayCloseSettings.static.distanceAlert.fontColor
+    )
+    self.instanceMessageFrame = MessageFrame.New(
+        GetScreenWidth(),
+        GetScreenHeight(),
+        StayCloseSettings.static.instanceAlert.x,
+        StayCloseSettings.static.instanceAlert.y,
+        StayCloseSettings.static.instanceAlert.fontSize,
+        StayCloseSettings.static.instanceAlert.fontColor
+    )
+    self.bearingArrowFrame = TextureFrame.New(
+        StayCloseSettings.static.bearingArrow.width,
+        StayCloseSettings.static.bearingArrow.height,
+        StayCloseSettings.static.bearingArrow.x,
+        StayCloseSettings.static.bearingArrow.y,
+        StayCloseSettings.static.bearingArrow.textureFile
+    )
     return self
 end
 
 function Core:EnableDistanceAlertMessage()
     self.distanceAlertEnabled = true
     self.distanceMessageFrame:Show()
+    self.bearingArrowFrame:Show()
 end
 
-function Core:UpdateBearingInfo()
-
+function Core:UpdateBearingInfo(bearing)
+    self.bearingArrowFrame:Rotate(bearing)
 end
 
 function Core:UpdateDistanceInfo(playerDistanceFromTarget)
     self.distanceMessageFrame:SetMessage(
         Utils.FormatString(
-            StayCloseSettings.static.distanceAlertMessage,
+            StayCloseSettings.static.distanceAlert.message,
             {
                 targetName = Utils.GetUnitName(StayCloseSettings.mutable.targetID),
                 distance = math.floor(playerDistanceFromTarget)
             }
-        ),
-        unpack(StayCloseSettings.static.alertMessageColor)
+        )
     )
 end
 
 function Core:DisableDistanceAlertMessage()
     self.distanceAlertEnabled = false
     self.distanceMessageFrame:Hide()
+    self.bearingArrowFrame:Hide()
 end
 
 function Core:EnableInstanceAlertMessage()
     self.instanceAlertEnabled = true
     self.instanceMessageFrame:SetMessage(
         Utils.FormatString(
-            StayCloseSettings.static.instanceAlertMessage,
+            StayCloseSettings.static.instanceAlert.message,
             {
                 targetName = Utils.GetUnitName(StayCloseSettings.mutable.targetID),
             }
-        ),
-        unpack(StayCloseSettings.static.alertMessageColor)
+        )
     )
     self.instanceMessageFrame:Show()
 end
@@ -76,10 +97,10 @@ function Core:UpdateFrame()
                 local playerDistanceFromTarget = Localization:GetEuclideanDistance(self.playerPosition,
                     self.targetPosition)
 
-                if playerDistanceFromTarget >= StayCloseSettings.mutable.minSafetyDistance then
+                if playerDistanceFromTarget >= StayCloseSettings.mutable.safetyRadius then
                     local playerBearing = Localization:GetRelativeBearing(self.playerPosition, self.targetPosition)
                     self:UpdateDistanceInfo(playerDistanceFromTarget)
-                    self:UpdateBearingInfo()
+                    self:UpdateBearingInfo(playerBearing)
 
                     if not self.distanceAlertEnabled then
                         self:EnableDistanceAlertMessage()
@@ -90,8 +111,4 @@ function Core:UpdateFrame()
             end
         end
     end
-end
-
-function Core:Run()
-    Initializer:LoadAddOn(self, self.UpdateFrame)
 end

@@ -1,21 +1,20 @@
 MessageFrame = {}
 MessageFrame.__index = MessageFrame
 
-function MessageFrame.New(width, height, x, y)
+function MessageFrame.New(width, height, x, y, fontSize, fontColor)
     local self = setmetatable({}, MessageFrame)
-    self._x = x or nil
-    self._y = y or nil
     self.frame = CreateFrame("Frame", nil, UIParent)
     self.frame:SetSize(width, height)
-    self.frame:SetPoint("CENTER", UIParent, "CENTER", self._x, self._y)
+    self.frame:SetPoint("CENTER", UIParent, "CENTER", x, y)
     self.messageText = self.frame:CreateFontString(nil, "OVERLAY")
     self.messageText:SetAllPoints(self.frame)
-    self.messageText:SetFont("Fonts\\FRIZQT__.TTF", 30, "OUTLINE")
+    self.messageText:SetTextColor(unpack(fontColor))
+    self.messageText:SetFont("Fonts\\FRIZQT__.TTF", fontSize, "OUTLINE")
+    self:Hide()
     return self
 end
 
-function MessageFrame:SetMessage(msg, ...)
-    self.messageText:SetTextColor(...)
+function MessageFrame:SetMessage(msg)
     self.messageText:SetText(msg)
 end
 

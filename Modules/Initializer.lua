@@ -1,7 +1,7 @@
 Initializer = {}
 Initializer.__index = Initializer
 
-function Initializer.LoadAddOn(cls, callbackObjectReference, callback)
+function Initializer.LoadAddOn()
     local elapsedTime = 0
     local frame = CreateFrame("Frame")
     frame:RegisterEvent("ADDON_LOADED")
@@ -15,11 +15,12 @@ function Initializer.LoadAddOn(cls, callbackObjectReference, callback)
             end
 
             StayCloseSettings.static = DefaultSettings.static
+            local core = Core.New()
             frame:SetScript("OnUpdate", function(_, deltaTime)
                 elapsedTime = elapsedTime + deltaTime
 
                 if elapsedTime >= StayCloseSettings.static.frameUpdateInterval then
-                    callback(callbackObjectReference)
+                    core:UpdateFrame()
                     elapsedTime = 0
                 end
             end)
