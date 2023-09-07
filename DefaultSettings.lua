@@ -5,6 +5,15 @@ DefaultSettings = {
         frameUpdateInterval = 0.02, -- In seconds
         safetyRadius = 20,          -- In yards
         targetID = "player",
+        debugMode = true,
+    },
+    sound = {
+        distanceAlert = {
+            file = "Interface\\AddOns\\StayClose\\Sounds\\AmongUs.ogg",
+        },
+        instanceAlert = {
+            file = "Interface\\AddOns\\StayClose\\Sounds\\MipMipPew.ogg",
+        },
     },
     interface = {
         distanceAlert = {

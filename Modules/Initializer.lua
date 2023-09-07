@@ -7,7 +7,7 @@ function Initializer.LoadAddOn()
     frame:RegisterEvent("ADDON_LOADED")
     frame:SetScript("OnEvent", function(_, event, addOnName)
         if event == "ADDON_LOADED" and addOnName == DefaultSettings.core.addOnName then
-            if not StayCloseSettings or next(StayCloseSettings) == nil then
+            if not StayCloseSettings or next(StayCloseSettings) == nil or DefaultSettings.core.debugMode then
                 StayCloseSettings = DefaultSettings
             end
 

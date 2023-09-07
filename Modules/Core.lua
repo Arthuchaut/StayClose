@@ -34,6 +34,7 @@ end
 
 function Core:EnableDistanceAlertMessage()
     self.distanceAlertEnabled = true
+    PlaySoundFile(StayCloseSettings.sound.distanceAlert.file)
     self.distanceMessageFrame:Show()
     self.bearingArrowFrame:Show()
 end
@@ -65,6 +66,7 @@ end
 
 function Core:EnableInstanceAlertMessage()
     self.instanceAlertEnabled = true
+    PlaySoundFile(StayCloseSettings.sound.instanceAlert.file)
     self.instanceMessageFrame:SetMessage(
         Utils.FormatString(
             StayCloseSettings.interface.instanceAlert.message,
@@ -87,7 +89,7 @@ function Core:UpdateFrame()
 
         if UnitExists(StayCloseSettings.core.targetID) then
             -- targetPosition = Localization:GetWorldPosition(StayCloseSettings.core.targetID)
-            local targetPosition = Position.New(-8825, 634, 0) -- The place near the auction house in Stomwind
+            local targetPosition = Position.New(-8825, 634, 0) -- A place near the auction house in Stomwind
 
             if playerPosition.mapID ~= targetPosition.mapID then
                 if not self.instanceAlertEnabled then
