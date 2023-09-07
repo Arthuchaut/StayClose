@@ -9,5 +9,5 @@ function Vector2D.New(x, y)
 end
 
 function Vector2D:SubtractVector2D(other)
-    return Vector2D.New(other.x - self.x, other.y - self.y) 
+    return Vector2D.New(other.x - self.x, other.y - self.y)
 end

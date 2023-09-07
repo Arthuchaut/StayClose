@@ -13,74 +13,78 @@ function Core.New()
 end
 
 function Core:EnableDistanceAlertMessage()
+    self.distanceAlertEnabled = true
     self.distanceMessageFrame:Show()
 end
 
 function Core:UpdateBearingInfo()
-    self.distanceMessageFrame:SetMessage(
-        string.format(
-            "%s (%.f yd).",
-            StayCloseSettings.static.distanceAlertMessage,
-            self.playerBearing
-        )
-    )
+
 end
 
 function Core:UpdateDistanceInfo(playerDistanceFromTarget)
     self.distanceMessageFrame:SetMessage(
-        string.format(
-            "%s (%.f yd).",
+        Utils.FormatString(
             StayCloseSettings.static.distanceAlertMessage,
-            playerDistanceFromTarget
+            {
+                targetName = Utils.GetUnitName(StayCloseSettings.mutable.targetID),
+                distance = math.floor(playerDistanceFromTarget)
+            }
         ),
         unpack(StayCloseSettings.static.alertMessageColor)
     )
 end
 
 function Core:DisableDistanceAlertMessage()
+    self.distanceAlertEnabled = false
     self.distanceMessageFrame:Hide()
 end
 
 function Core:EnableInstanceAlertMessage()
-    self.instanceMessageFrame:SetMessage("Instance alert enabled!", unpack(StayCloseSettings.static.alertMessageColor))
-    -- self.instanceMessageFrame:Show()
+    self.instanceAlertEnabled = true
+    self.instanceMessageFrame:SetMessage(
+        Utils.FormatString(
+            StayCloseSettings.static.instanceAlertMessage,
+            {
+                targetName = Utils.GetUnitName(StayCloseSettings.mutable.targetID),
+            }
+        ),
+        unpack(StayCloseSettings.static.alertMessageColor)
+    )
+    self.instanceMessageFrame:Show()
 end
 
 function Core:DisableInstanceAlertMessage()
+    self.instanceAlertEnabled = false
     self.instanceMessageFrame:Hide()
 end
 
 function Core:UpdateFrame()
-    if StayCloseSettings.variable.distanceWatcherEnabled then
+    if StayCloseSettings.mutable.distanceWatcherEnabled then
         self.playerPosition = Localization:GetWorldPosition("player")
 
-        if UnitExists(StayCloseSettings.variable.targetID) then
-            -- self.targetPosition = Localization:GetWorldPosition(StayCloseSettings.variable.targetID)
+        if UnitExists(StayCloseSettings.mutable.targetID) then
+            -- self.targetPosition = Localization:GetWorldPosition(StayCloseSettings.mutable.targetID)
             self.targetPosition = Position.New(-8825, 634, 0) -- The place near the auction house in Stomwind
 
             if self.playerPosition.mapID ~= self.targetPosition.mapID then
                 if not self.instanceAlertEnabled then
-                    self.instanceAlertEnabled = true
                     self:EnableInstanceAlertMessage()
                 end
+            elseif self.instanceAlertEnabled then
+                self:DisableInstanceAlertMessage()
             else
-                if self.instanceAlertEnabled then
-                    self.instanceAlertEnabled = false
-                    self:DisableInstanceAlertMessage()
-                end
+                local playerDistanceFromTarget = Localization:GetEuclideanDistance(self.playerPosition,
+                    self.targetPosition)
 
-                local playerDistanceFromTarget = Localization:GetEuclideanDistance(self.playerPosition, self.targetPosition)
-
-                if playerDistanceFromTarget >= StayCloseSettings.variable.minSafetyDistance then
+                if playerDistanceFromTarget >= StayCloseSettings.mutable.minSafetyDistance then
                     local playerBearing = Localization:GetRelativeBearing(self.playerPosition, self.targetPosition)
                     self:UpdateDistanceInfo(playerDistanceFromTarget)
+                    self:UpdateBearingInfo()
 
                     if not self.distanceAlertEnabled then
-                        self.distanceAlertEnabled = true
                         self:EnableDistanceAlertMessage()
                     end
                 elseif self.distanceAlertEnabled then
-                    self.distanceAlertEnabled = false
                     self:DisableDistanceAlertMessage()
                 end
             end
