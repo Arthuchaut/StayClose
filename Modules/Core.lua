@@ -3,33 +3,31 @@ Core.__index = Core
 
 function Core.New()
     local self = setmetatable({}, Core)
-    self.playerPosition = nil
-    self.targetPosition = nil
     self.distanceAlertEnabled = false
     self.instanceAlertEnabled = false
     self.distanceMessageFrame = MessageFrame.New(
         GetScreenWidth(),
         GetScreenHeight(),
-        StayCloseSettings.static.distanceAlert.x,
-        StayCloseSettings.static.distanceAlert.y,
-        StayCloseSettings.static.distanceAlert.fontSize,
-        StayCloseSettings.static.distanceAlert.fontColor
+        StayCloseSettings.interface.distanceAlert.x,
+        StayCloseSettings.interface.distanceAlert.y,
+        StayCloseSettings.interface.distanceAlert.fontSize,
+        StayCloseSettings.interface.distanceAlert.fontColor
     )
     self.instanceMessageFrame = MessageFrame.New(
         GetScreenWidth(),
         GetScreenHeight(),
-        StayCloseSettings.static.instanceAlert.x,
-        StayCloseSettings.static.instanceAlert.y,
-        StayCloseSettings.static.instanceAlert.fontSize,
-        StayCloseSettings.static.instanceAlert.fontColor
+        StayCloseSettings.interface.instanceAlert.x,
+        StayCloseSettings.interface.instanceAlert.y,
+        StayCloseSettings.interface.instanceAlert.fontSize,
+        StayCloseSettings.interface.instanceAlert.fontColor
     )
     self.bearingArrowFrame = TextureFrame.New(
-        StayCloseSettings.static.bearingArrow.width,
-        StayCloseSettings.static.bearingArrow.height,
-        StayCloseSettings.static.bearingArrow.x,
-        StayCloseSettings.static.bearingArrow.y,
-        StayCloseSettings.static.bearingArrow.textureFile,
-        StayCloseSettings.static.bearingArrow.textureColor
+        StayCloseSettings.interface.bearingArrow.width,
+        StayCloseSettings.interface.bearingArrow.height,
+        StayCloseSettings.interface.bearingArrow.x,
+        StayCloseSettings.interface.bearingArrow.y,
+        StayCloseSettings.interface.bearingArrow.textureFile,
+        StayCloseSettings.interface.bearingArrow.textureColor
     )
     return self
 end
@@ -50,9 +48,9 @@ end
 function Core:UpdateDistanceInfo(playerDistanceFromTarget)
     self.distanceMessageFrame:SetMessage(
         Utils.FormatString(
-            StayCloseSettings.static.distanceAlert.message,
+            StayCloseSettings.interface.distanceAlert.message,
             {
-                targetName = Utils.GetUnitName(StayCloseSettings.mutable.targetID),
+                targetName = Utils.GetUnitName(StayCloseSettings.core.targetID),
                 distance = math.floor(playerDistanceFromTarget)
             }
         )
@@ -69,9 +67,9 @@ function Core:EnableInstanceAlertMessage()
     self.instanceAlertEnabled = true
     self.instanceMessageFrame:SetMessage(
         Utils.FormatString(
-            StayCloseSettings.static.instanceAlert.message,
+            StayCloseSettings.interface.instanceAlert.message,
             {
-                targetName = Utils.GetUnitName(StayCloseSettings.mutable.targetID),
+                targetName = Utils.GetUnitName(StayCloseSettings.core.targetID),
             }
         )
     )
@@ -84,25 +82,25 @@ function Core:DisableInstanceAlertMessage()
 end
 
 function Core:UpdateFrame()
-    if StayCloseSettings.mutable.distanceWatcherEnabled then
-        self.playerPosition = Localization:GetWorldPosition("player")
+    if StayCloseSettings.core.distanceWatcherEnabled then
+        local playerPosition = Localization:GetWorldPosition("player")
 
-        if UnitExists(StayCloseSettings.mutable.targetID) then
-            -- self.targetPosition = Localization:GetWorldPosition(StayCloseSettings.mutable.targetID)
-            self.targetPosition = Position.New(-8825, 634, 0) -- The place near the auction house in Stomwind
+        if UnitExists(StayCloseSettings.core.targetID) then
+            -- targetPosition = Localization:GetWorldPosition(StayCloseSettings.core.targetID)
+            local targetPosition = Position.New(-8825, 634, 0) -- The place near the auction house in Stomwind
 
-            if self.playerPosition.mapID ~= self.targetPosition.mapID then
+            if playerPosition.mapID ~= targetPosition.mapID then
                 if not self.instanceAlertEnabled then
                     self:EnableInstanceAlertMessage()
                 end
             elseif self.instanceAlertEnabled then
                 self:DisableInstanceAlertMessage()
             else
-                local playerDistanceFromTarget = Localization:GetEuclideanDistance(self.playerPosition,
-                    self.targetPosition)
+                local playerDistanceFromTarget = Localization:GetEuclideanDistance(playerPosition,
+                    targetPosition)
 
-                if playerDistanceFromTarget >= StayCloseSettings.mutable.safetyRadius then
-                    local playerBearing = Localization:GetRelativeBearing(self.playerPosition, self.targetPosition)
+                if playerDistanceFromTarget >= StayCloseSettings.core.safetyRadius then
+                    local playerBearing = Localization:GetRelativeBearing(playerPosition, targetPosition)
                     self:UpdateDistanceInfo(playerDistanceFromTarget)
                     self:UpdateBearingInfo(playerBearing)
 

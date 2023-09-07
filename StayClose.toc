@@ -5,8 +5,8 @@
 ## Version: 0.0.1-dev
 ## SavedVariables: StayCloseSettings
 
-DefaultSettings.lua
 Libs/Utils.lua
+DefaultSettings.lua
 Libs/Localization/Vector2D.lua
 Libs/Localization/Position.lua
 Libs/Localization/Localization.lua

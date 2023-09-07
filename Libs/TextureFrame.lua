@@ -14,8 +14,8 @@ function TextureFrame.New(width, height, x, y, textureFile, textureColor)
     return self
 end
 
-function TextureFrame:SetColor(...)
-    self.texture:SetVertexColor(...)
+function TextureFrame:SetColor(r, g, b, a)
+    self.texture:SetVertexColor(r, g, b, a)
 end
 
 function TextureFrame:Rotate(degree)

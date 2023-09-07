@@ -6,20 +6,16 @@ function Initializer.LoadAddOn()
     local frame = CreateFrame("Frame")
     frame:RegisterEvent("ADDON_LOADED")
     frame:SetScript("OnEvent", function(_, event, addOnName)
-        if event == "ADDON_LOADED" and addOnName == DefaultSettings.static.addOnName then
+        if event == "ADDON_LOADED" and addOnName == DefaultSettings.core.addOnName then
             if not StayCloseSettings or next(StayCloseSettings) == nil then
-                StayCloseSettings = {
-                    static = nil,
-                    mutable = DefaultSettings.mutable,
-                }
+                StayCloseSettings = DefaultSettings
             end
 
-            StayCloseSettings.static = DefaultSettings.static
             local core = Core.New()
             frame:SetScript("OnUpdate", function(_, deltaTime)
                 elapsedTime = elapsedTime + deltaTime
 
-                if elapsedTime >= StayCloseSettings.static.frameUpdateInterval then
+                if elapsedTime >= StayCloseSettings.core.frameUpdateInterval then
                     core:UpdateFrame()
                     elapsedTime = 0
                 end
