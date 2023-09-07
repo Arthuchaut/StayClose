@@ -3,84 +3,9 @@ Core.__index = Core
 
 function Core.New()
     local self = setmetatable({}, Core)
-    self.distanceAlertEnabled = false
-    self.instanceAlertEnabled = false
-    self.distanceMessageFrame = MessageFrame.New(
-        GetScreenWidth(),
-        GetScreenHeight(),
-        StayCloseSettings.interface.distanceAlert.x,
-        StayCloseSettings.interface.distanceAlert.y,
-        StayCloseSettings.interface.distanceAlert.fontSize,
-        StayCloseSettings.interface.distanceAlert.fontColor
-    )
-    self.instanceMessageFrame = MessageFrame.New(
-        GetScreenWidth(),
-        GetScreenHeight(),
-        StayCloseSettings.interface.instanceAlert.x,
-        StayCloseSettings.interface.instanceAlert.y,
-        StayCloseSettings.interface.instanceAlert.fontSize,
-        StayCloseSettings.interface.instanceAlert.fontColor
-    )
-    self.bearingArrowFrame = TextureFrame.New(
-        StayCloseSettings.interface.bearingArrow.width,
-        StayCloseSettings.interface.bearingArrow.height,
-        StayCloseSettings.interface.bearingArrow.x,
-        StayCloseSettings.interface.bearingArrow.y,
-        StayCloseSettings.interface.bearingArrow.textureFile,
-        StayCloseSettings.interface.bearingArrow.textureColor
-    )
+    self.distanceAlert = DistanceAlert.New()
+    self.instanceAlert = InstanceAlert.New()
     return self
-end
-
-function Core:EnableDistanceAlertMessage()
-    self.distanceAlertEnabled = true
-    PlaySoundFile(StayCloseSettings.sound.distanceAlert.file)
-    self.distanceMessageFrame:Show()
-    self.bearingArrowFrame:Show()
-end
-
-function Core:UpdateBearingInfo(bearing)
-    local g = math.abs(bearing - 180) / 180
-    local r = 1 - g
-    self.bearingArrowFrame:SetColor(r, g, 0, 1)
-    self.bearingArrowFrame:Rotate(bearing)
-end
-
-function Core:UpdateDistanceInfo(playerDistanceFromTarget)
-    self.distanceMessageFrame:SetMessage(
-        Utils.FormatString(
-            StayCloseSettings.interface.distanceAlert.message,
-            {
-                targetName = Utils.GetUnitName(StayCloseSettings.core.targetID),
-                distance = math.floor(playerDistanceFromTarget)
-            }
-        )
-    )
-end
-
-function Core:DisableDistanceAlertMessage()
-    self.distanceAlertEnabled = false
-    self.distanceMessageFrame:Hide()
-    self.bearingArrowFrame:Hide()
-end
-
-function Core:EnableInstanceAlertMessage()
-    self.instanceAlertEnabled = true
-    PlaySoundFile(StayCloseSettings.sound.instanceAlert.file)
-    self.instanceMessageFrame:SetMessage(
-        Utils.FormatString(
-            StayCloseSettings.interface.instanceAlert.message,
-            {
-                targetName = Utils.GetUnitName(StayCloseSettings.core.targetID),
-            }
-        )
-    )
-    self.instanceMessageFrame:Show()
-end
-
-function Core:DisableInstanceAlertMessage()
-    self.instanceAlertEnabled = false
-    self.instanceMessageFrame:Hide()
 end
 
 function Core:UpdateFrame()
@@ -92,25 +17,25 @@ function Core:UpdateFrame()
             local targetPosition = Position.New(-8825, 634, 0) -- A place near the auction house in Stomwind
 
             if playerPosition.mapID ~= targetPosition.mapID then
-                if not self.instanceAlertEnabled then
-                    self:EnableInstanceAlertMessage()
+                if not self.instanceAlert:IsEnabled() then
+                    self.instanceAlert:EnableAlert()
                 end
-            elseif self.instanceAlertEnabled then
-                self:DisableInstanceAlertMessage()
+            elseif self.instanceAlert:IsEnabled() then
+                self.instanceAlert:DistanceAlert()
             else
                 local playerDistanceFromTarget = Localization:GetEuclideanDistance(playerPosition,
                     targetPosition)
 
                 if playerDistanceFromTarget >= StayCloseSettings.core.safetyRadius then
                     local playerBearing = Localization:GetRelativeBearing(playerPosition, targetPosition)
-                    self:UpdateDistanceInfo(playerDistanceFromTarget)
-                    self:UpdateBearingInfo(playerBearing)
+                    self.distanceAlert:UpdateDistanceInfo(playerDistanceFromTarget)
+                    self.distanceAlert:UpdateBearingInfo(playerBearing)
 
-                    if not self.distanceAlertEnabled then
-                        self:EnableDistanceAlertMessage()
+                    if not self.distanceAlert:IsEnabled() then
+                        self.distanceAlert:EnableAlert()
                     end
-                elseif self.distanceAlertEnabled then
-                    self:DisableDistanceAlertMessage()
+                elseif self.distanceAlert:IsEnabled() then
+                    self.distanceAlert:DisableAlert()
                 end
             end
         end

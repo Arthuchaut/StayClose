@@ -12,6 +12,7 @@ Libs/Localization/Position.lua
 Libs/Localization/Localization.lua
 Libs/MessageFrame.lua
 Libs/TextureFrame.lua
+Modules/Alert.lua
 Modules/Core.lua
 Modules/Initializer.lua
 StayClose.lua

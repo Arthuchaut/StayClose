@@ -26,7 +26,7 @@ DefaultSettings = {
         instanceAlert = {
             message = "You're not in the same instance than {targetName}!",
             fontSize = 30,
-            fontColor = Utils.NormalizeRGBA(255, 0, 0, 255), -- RGBA
+            fontColor = Utils.NormalizeRGBA(255, 120, 0, 255), -- RGBA
             x = 0,
             y = 0,
         },
