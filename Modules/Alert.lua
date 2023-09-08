@@ -29,11 +29,13 @@ end
 function BaseAlert:EnableAlert(message)
     self.alertEnabled = true
     self.messageFrame:SetMessage(message)
+    self.messageFrame:StartBouncing()
     self.messageFrame:Show()
 end
 
 function BaseAlert:DisableAlert()
     self.alertEnabled = false
+    self.messageFrame:StopBouncing()
     self.messageFrame:Hide()
 end
 

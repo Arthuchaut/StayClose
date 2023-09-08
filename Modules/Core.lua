@@ -13,15 +13,15 @@ function Core:UpdateFrame()
         local playerPosition = Localization:GetWorldPosition("player")
 
         if UnitExists(StayCloseSettings.core.targetID) then
-            -- targetPosition = Localization:GetWorldPosition(StayCloseSettings.core.targetID)
-            local targetPosition = Position.New(-8825, 634, 0) -- A place near the auction house in Stomwind
+            local targetPosition = Localization:GetWorldPosition(StayCloseSettings.core.targetID)
+            -- local targetPosition = Position.New(-8825, 634, 0) -- A place near the auction house in Stomwind
 
             if playerPosition.mapID ~= targetPosition.mapID then
                 if not self.instanceAlert:IsEnabled() then
                     self.instanceAlert:EnableAlert()
                 end
             elseif self.instanceAlert:IsEnabled() then
-                self.instanceAlert:DistanceAlert()
+                self.instanceAlert:DisableAlert()
             else
                 local playerDistanceFromTarget = Localization:GetEuclideanDistance(playerPosition,
                     targetPosition)

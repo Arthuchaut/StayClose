@@ -2,9 +2,9 @@ DefaultSettings = {
     core = {
         addOnName = "StayClose",
         distanceWatcherEnabled = true,
-        frameUpdateInterval = 0.02, -- In seconds
-        safetyRadius = 20,          -- In yards
-        targetID = "player",
+        frameUpdateInterval = 0.005, -- In seconds
+        safetyRadius = 20,           -- In yards
+        targetID = "party1",
         debugMode = true,
     },
     sound = {
@@ -21,20 +21,20 @@ DefaultSettings = {
             fontSize = 30,
             fontColor = Utils.NormalizeRGBA(255, 0, 0, 255), -- RGBA
             x = 0,
-            y = 0,
+            y = 100,
         },
         instanceAlert = {
             message = "You're not in the same instance than {targetName}!",
             fontSize = 30,
             fontColor = Utils.NormalizeRGBA(255, 120, 0, 255), -- RGBA
             x = 0,
-            y = 0,
+            y = 100,
         },
         bearingArrow = {
-            width = 50,
-            height = 50,
+            width = 40,
+            height = 40,
             x = 0,
-            y = -100,
+            y = 50,
             textureFile = "Interface\\AddOns\\StayClose\\Textures\\Arrow.tga",
             textureColor = Utils.NormalizeRGBA(255, 0, 0, 255), -- RGBA
         },
